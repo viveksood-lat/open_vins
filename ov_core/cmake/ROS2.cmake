@@ -62,25 +62,5 @@ install(DIRECTORY src/
 ament_export_include_directories(include)
 ament_export_libraries(ov_core_lib)
 
-##################################################
-# Make binary files!
-##################################################
-
-# TODO: UPGRADE THIS TO ROS2 AS ANOTHER FILE!!
-#if (catkin_FOUND AND ENABLE_ROS)
-#    add_executable(test_tracking src/test_tracking.cpp)
-#    target_link_libraries(test_tracking ov_core_lib ${thirdparty_libraries})
-#endif ()
-
-add_executable(test_webcam src/test_webcam.cpp)
-ament_target_dependencies(test_webcam rclcpp cv_bridge)
-target_link_libraries(test_webcam ov_core_lib ${thirdparty_libraries})
-install(TARGETS test_webcam DESTINATION lib/${PROJECT_NAME})
-
-add_executable(test_profile src/test_profile.cpp)
-ament_target_dependencies(test_profile rclcpp cv_bridge)
-target_link_libraries(test_profile ov_core_lib ${thirdparty_libraries})
-install(TARGETS test_profile DESTINATION lib/${PROJECT_NAME})
-
 # finally define this as the package
 ament_package()
