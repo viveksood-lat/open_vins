@@ -230,7 +230,8 @@ bool UpdaterZeroVelocity::try_update(std::shared_ptr<State> state, double timest
     // Check if this disparity is enough to be classified as moving
     disparity_passed = (disp_avg < _zupt_max_disparity && num_features > 20);
     if (disparity_passed) {
-      PRINT_INFO(CYAN "[ZUPT]: passed disparity (%.3f < %.3f, %d features)\n" RESET, disp_avg, _zupt_max_disparity, (int)num_features);
+      if (last_zupt_count % 25 == 0)
+        PRINT_INFO(CYAN "[ZUPT]: passed disparity (%.3f < %.3f, %d features)\n" RESET, disp_avg, _zupt_max_disparity, (int)num_features);
     } else {
       PRINT_DEBUG(YELLOW "[ZUPT]: failed disparity (%.3f > %.3f, %d features)\n" RESET, disp_avg, _zupt_max_disparity, (int)num_features);
     }
@@ -245,8 +246,9 @@ bool UpdaterZeroVelocity::try_update(std::shared_ptr<State> state, double timest
                 _options.chi2_multipler * chi2_check);
     return false;
   }
-  PRINT_INFO(CYAN "[ZUPT]: accepted |v_IinG| = %.3f (chi2 %.3f < %.3f)\n" RESET, state->_imu->vel().norm(), chi2,
-             _options.chi2_multipler * chi2_check);
+  if (last_zupt_count % 25 == 0)
+    PRINT_INFO(CYAN "[ZUPT]: accepted |v_IinG| = %.3f (chi2 %.3f < %.3f)\n" RESET, state->_imu->vel().norm(), chi2,
+               _options.chi2_multipler * chi2_check);
 
   // Do our update, only do this update if we have previously detected
   // If we have succeeded, then we should remove the current timestamp feature tracks
